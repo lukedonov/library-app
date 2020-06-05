@@ -15,15 +15,14 @@ router.post('/', (req, res) => {
   const author = new Author({
     name: req.body.name
   })
-
   author.save((err, newAuthor) => {
     if (err) {
-      res.render('/authors/new', {
+      const locals = {
         author: author,
-        errorMessage: "Error creating Author"
-      })
+        errorMessage: 'Error creating author'
+      }
+      res.render('authors/new', locals)
     } else {
-      // res.redirect(`/authors/${newAuthor.id}`)
       res.redirect('/authors')
     }
   }) 
