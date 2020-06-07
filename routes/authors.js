@@ -37,17 +37,6 @@ router.post('/', async(req, res) => {
       }
       res.render('authors/new', locals)
   }
-  // author.save((err, newAuthor) => {
-  //   if (err) {
-  //     const locals = {
-  //       author: author,
-  //       errorMessage: 'Error creating author'
-  //     }
-  //     res.render('authors/new', locals)
-  //   } else {
-  //     res.redirect('/authors')
-  //   }
-  // }) 
 })
 
 module.exports = router
