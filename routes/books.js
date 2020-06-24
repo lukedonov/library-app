@@ -16,8 +16,38 @@ const upload = multer({
 })
 
 router.get('/', async(req, res) => {
-  res.send('All Books')
+  let query = Book.find()
+  if (req.query.title != null && req.query.title != ""){
+    query = query.regex('title', new RegExp(req.query.title, 'i'))
+  }
+  try {
+    const books = await query.exec()
+    res.render('books/index', {
+      books: books,
+      searchOptions: req.query,
+    })
+  } catch {
+    res.redirect('/')
+  }
 }) 
+
+// router.get('/', async(req, res) => {
+//   let searchOptions = {}
+//   if (req.query.name != null && req.query.name !== '') {
+//     searchOptions.name = new RegExp(req.query.name, 'i')
+//   }
+//   try {
+//     const books = await Book.find(searchOptions)
+//     const authors = await Author.find(searchOptions)
+//     res.render('books/index', {
+//       books: books,
+//       authors: authors,
+//       searchOptions: req.query
+//     })
+//   } catch {
+//     res.redirect('/')
+//   }
+// }) 
 
 router.get('/new', async(req, res) => {
   renderNewPage(res, new Book())
