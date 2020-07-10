@@ -3,7 +3,6 @@ const router = express.Router()
 const Book = require('../models/book')
 const Author = require('../models/user')
 const { fstat } = require('fs')
-const uploadPath = path.join('public', Book.coverImageBasePath)
 const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif']
 
 
