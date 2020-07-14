@@ -77,7 +77,19 @@ router.get('/:id', async (req, res) => {
 })
 
 router.get('/:id/edit', async (req, res) => {
-  res.send("edit book " + req.params.id )
+  try {
+    const authors = await Author.find({})
+    const book = await Book.findById(req.params.id)
+    // book.title = req.body.title
+    // book.pageCount = req.body.pageCount
+    // book.description = req.body.description
+    res.render('books/edit', ({
+      book: book,
+      authors: authors
+    }))
+  } catch {
+    res.render('/')
+  }
 })
 
 router.put('/:id', async (req, res) => {
@@ -85,7 +97,15 @@ router.put('/:id', async (req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
-  res.send("delete book " + req.params.id )
+  let book
+  try {
+    book = await Book.findById(req.params.id)
+    const author = await Author.findById(book.author)
+    await book.remove()
+    res.redirect('/books')
+  } catch {
+    res.redirect('/')
+  }
 })
 
 module.exports = router
