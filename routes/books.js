@@ -73,16 +73,20 @@ function saveCover(book, coverEncoded) {
 }
 
 router.get('/:id', async (req, res) => {
-  res.send("Show book " + req.params.id )
+  try {
+    const book = await Book.findById(req.params.id).populate('author').exec()
+    res.render('books/show', {
+      book: book
+    })
+  } catch {
+    res.redirect('/')  
+  }
 })
 
 router.get('/:id/edit', async (req, res) => {
   try {
     const authors = await Author.find({})
     const book = await Book.findById(req.params.id)
-    // book.title = req.body.title
-    // book.pageCount = req.body.pageCount
-    // book.description = req.body.description
     res.render('books/edit', ({
       book: book,
       authors: authors
@@ -93,7 +97,27 @@ router.get('/:id/edit', async (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
-  res.send("update book " + req.params.id )
+  let book
+  try {
+    book = await Book.findById(req.params.id)
+    book.title = req.body.title
+    book.pageCount = req.body.pageCount
+    book.description = req.body.description
+    await book.save()
+    // res.redirect(`/book/${book.id}`)
+    res.redirect(`/books`)
+  } catch {
+    if (book === null) {
+      res.redirect('/')
+    } else {
+      const locals = {
+        book: book,
+        authors: authors,
+        errorMessage: 'Error updating author'
+      }
+      res.render('books/edit', locals)
+    }
+  }
 })
 
 router.delete('/:id', async (req, res) => {
