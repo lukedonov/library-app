@@ -72,4 +72,20 @@ function saveCover(book, coverEncoded) {
   }
 }
 
+router.get('/:id', async (req, res) => {
+  res.send("Show book " + req.params.id )
+})
+
+router.get('/:id/edit', async (req, res) => {
+  res.send("edit book " + req.params.id )
+})
+
+router.put('/:id', async (req, res) => {
+  res.send("update book " + req.params.id )
+})
+
+router.delete('/:id', async (req, res) => {
+  res.send("delete book " + req.params.id )
+})
+
 module.exports = router
